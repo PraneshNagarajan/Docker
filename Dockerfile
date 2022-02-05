@@ -2,4 +2,4 @@
 FROM ubuntu
 RUN apt update
 RUN apt install python -y
-CMD ["python --version"]
+CMD [python --version]
