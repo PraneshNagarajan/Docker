@@ -1,4 +1,5 @@
 #Pull from base image
 FROM ubuntu
-RUN yum install java -y
-CMD ["java --version"]
+RUN apt update
+RUN apt install python
+CMD ["python --version"]
