@@ -48,6 +48,8 @@ MongoClient.connect("mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:2
 	//var server_hits =  mongoDB.db("server_hit")
 	//var collection = server_hits.collection("hits")
 	// check db function
+	user = req.body.user
+	password = req.body.password
 	var collection = db(mongoDB)
 	collection.insertOne({ hits: 1 }, (err, result) => {
              if (err) {  res.send(String(err)) }
