@@ -4,12 +4,10 @@ const bodyParser = require('body-parser')
 const app = express()
 const MongoClient = mongo.MongoClient;
 const PORT = 5050
-const url = "mongodb://mongoDB:27017/server_hits";
 
 
 //save credentials
-var user = ""
-var password = ""
+var url
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -20,38 +18,31 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(jsonParser)
 app.use(urlencodedParser)
 
-const db = (mongoDB) => {
- var server_hits =  mongoDB.db("server_hit")
- var collection = server_hits.collection("hits")
- return collection
-}
 
 app.get("/getHits", (req,res) => {
-  MongoClient.connect("mongodb://"+user+":"+password+"@mongoDB:27017", (err, mongoDB) => {
+  MongoClient.connect(url, (err, mongoDB) => {
  	if(err) {
 		res.send(String(err) + " / First login to access request")
 	}
-         mongoDB.db("server_hit").collection("hits").find({} ,(err, result) => {
+	  var server_hits =  mongoDB.db("server_hit")
+         var collection = server_hits.collection("hits")
+         collection.find({}).toArray((err, result) => {
  		if (err) {
 		 res.send(String(err))
 		}
-		console.log(String(result.hits)) 
- 		res.send("No of times visited : " + result.hits)
+		console.log(result.keys()) 
+ 		res.send("No of times visited : " + result)
 	 })
   })
 })
 
 app.post("/insertNew" , (req,res) => {
-MongoClient.connect("mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:27017", (err, mongoDB) => {
+MongoClient.connect(url, (err, mongoDB) => {
         if(err) {
                 res.send(String(err))
         }
-	//var server_hits =  mongoDB.db("server_hit")
-	//var collection = server_hits.collection("hits")
-	// check db function
-	user = req.body.user
-	password = req.body.password
-	var collection = db(mongoDB)
+	var server_hits =  mongoDB.db("server_hit")
+	var collection = server_hits.collection("hits")
 	collection.insertOne({ hits: 1 }, (err, result) => {
              if (err) {  res.send(String(err)) }
 	     res.send("data inserted : " + result)
@@ -59,23 +50,12 @@ MongoClient.connect("mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:2
   })
 })
 
-
-app.get("/", (req,res) => {
-
-	MongoClient.connect(url, (err, DB) => {
-		if(err) {
-			res.send(String(err))
-		}else {
-			res.send("connected")
-		}
-	})
-})
-
 app.post("/login", (req,res) => {
 	MongoClient.connect( "mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:27017" , (err, DB) => {
 		if(err) {
 			res.send(String(err))
 		} else {
+			url="mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:27017"
 			res.send("login successfully")
 		}
 	})
