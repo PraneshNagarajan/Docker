@@ -2,7 +2,7 @@ version: '3.8'
 services:
   mongoDB:
     image: mongo
-    restart: "no"
+    restart: "always"
 # volumes used for save date permenantly after shutdown or restart container
     volumes:
       - my_data:/data/db

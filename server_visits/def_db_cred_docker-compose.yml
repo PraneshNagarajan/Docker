@@ -2,8 +2,10 @@ version: '3.8'
 services:
   mongoDB:
     image: mongo
-    restart: "no"
-# volumes used for save date permenantly after shutdown or restart container
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=my-username
+      - MONGO_INITDB_ROOT_PASSWORD=my-root-password
     volumes:
       - my_data:/data/db
   node-web:
@@ -12,5 +14,6 @@ services:
       - mongoDB
     ports:
       - "8080:5050"
+
 volumes:
   my_data:
