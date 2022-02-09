@@ -27,14 +27,15 @@ const db = (mongoDB) => {
 }
 
 app.get("/getHits", (req,res) => {
-  MongoClient.connect("mongodb://"+user+":"+password+"@mongoDB:27017/server_hit", (err, mongoDB) => {
+  MongoClient.connect("mongodb://"+user+":"+password+"@mongoDB:27017", (err, mongoDB) => {
  	if(err) {
 		res.send(String(err) + " / First login to access request")
 	}
-         mongoDB.collection("hits").find({}, (err, result) => {
+         mongoDB.db("server_hit").collection("hits").find({} ,(err, result) => {
  		if (err) {
 		 res.send(String(err))
 		}
+		console.log(String(result.hits)) 
  		res.send("No of times visited : " + result.hits)
 	 })
   })
