@@ -38,7 +38,7 @@ app.get("/getHits", (req,res) => {
  		res.send("No of times visited : " + result.hits)
 	 })
   })
- })
+})
 
 app.post("/insertNew" , (req,res) => {
 MongoClient.connect("mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:27017", (err, mongoDB) => {
@@ -54,6 +54,7 @@ MongoClient.connect("mongodb://"+req.body.user+":"+req.body.password+"@mongoDB:2
 	     res.send("data inserted : " + result)
 	})
   })
+})
 
 
 app.get("/", (req,res) => {
@@ -80,5 +81,3 @@ app.post("/login", (req,res) => {
 app.listen(PORT, () => {
     console.log("server is runing on port 5050")
 })
-
-
