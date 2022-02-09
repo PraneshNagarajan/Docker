@@ -8,6 +8,7 @@ const PORT = 5050;
 //save credentials
 var url;
 
+
 // create application/json parser
 var jsonParser = bodyParser.json();
 
@@ -22,12 +23,12 @@ app.get("/getHits", (req, res) => {
     if (err) {
       res.send(String(err) + " / First login to access request");
     }
-    var server_hits = mongoDB.db("server_hit");
-    var collection = server_hits.collection("hits");
-    collection.find().then((result) => {
-      res.json({
-        result,
-      });
+    var db = mongoDB.db("server_hit").collection("hits");
+    db.find({}, {projection:{_id:0}}).toArray((err,result) => {
+	var output = result[0].hits
+        res.send("visits : "+output)
+    	db.updateOne({hits: output}, {$set: {hits: output+1}},(err, res) => {
+	})
     });
   });
 });
@@ -37,9 +38,8 @@ app.post("/insertNew", (req, res) => {
     if (err) {
       res.send(String(err));
     }
-    var server_hits = mongoDB.db("server_hit");
-    var collection = server_hits.collection("hits");
-    collection.insertOne({ hits: 1 }, (err, result) => {
+    var db = mongoDB.db("server_hit").collection("hits");
+    db.insertOne({ hits: 1 }, (err, result) => {
       if (err) {
         res.send(String(err));
       }
