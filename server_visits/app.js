@@ -8,7 +8,6 @@ const PORT = 5050;
 //save credentials
 var url;
 
-
 // create application/json parser
 var jsonParser = bodyParser.json();
 
@@ -24,11 +23,20 @@ app.get("/getHits", (req, res) => {
       res.send(String(err) + " / First login to access request");
     }
     var db = mongoDB.db("server_hit").collection("hits");
-    db.find({}, {projection:{_id:0}}).toArray((err,result) => {
-	var output = result[0].hits
-        res.send("visits : "+output)
-    	db.updateOne({hits: output}, {$set: {hits: output+1}},(err, res) => {
-	})
+    // Get data from DB
+    db.find({}, { projection: { _id: 0 } }).toArray((err, result) => {
+      var output = result[0].hits;
+      // update server hit and update it
+      db.updateOne(
+        { hits: output },
+        { $set: { hits: output + 1 } },
+        (err, response) => {
+          if (err) {
+            String(err);
+          }
+          res.send("visits : " + output);
+        }
+      );
     });
   });
 });
@@ -39,6 +47,7 @@ app.post("/insertNew", (req, res) => {
       res.send(String(err));
     }
     var db = mongoDB.db("server_hit").collection("hits");
+    //insert value
     db.insertOne({ hits: 1 }, (err, result) => {
       if (err) {
         res.send(String(err));
@@ -70,4 +79,3 @@ app.post("/login", (req, res) => {
 app.listen(PORT, () => {
   console.log("server is runing on port 5050");
 });
-
