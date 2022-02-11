@@ -7,7 +7,11 @@ services:
     volumes:
       - my_data:/data/db
   node-web:
-    build: .
+#if you have only docker file
+#   build: .
+#if you have more than dockerfile on same dir below approach is better
+    build: 
+      dockerfile: Dockerfile
     depends_on:
       - mongoDB
     ports:
