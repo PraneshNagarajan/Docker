@@ -16,7 +16,7 @@ services:
     volumes:
       - logs:/app/logs
       - /app/node_modules 
-      - $(pwd)/backend:/app
+      - ./backend:/app
     
     ports:
       - '80:80'
