@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   mongodb:
+    container_name: mongodb
     image: mongo
     volumes:
       - data:/data/db
@@ -9,6 +10,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=secret
 
   backend:
+    container_name: backend
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -24,6 +26,7 @@ services:
       - mongodb
 
   frontend:
+    container_name: frontend
     build: ./frontend
     volumes:
       - ./frontend/src:/app/src
