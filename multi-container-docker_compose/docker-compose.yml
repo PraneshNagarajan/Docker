@@ -3,7 +3,7 @@ services:
   mongodb:
     image: mongo
     volumes:
-      - mongodb:/data/db
+      - data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=max
       - MONGO_INITDB_ROOT_PASSWORD=secret
@@ -35,5 +35,5 @@ services:
       - backend
 
 volumes:
-  mongodb:
+  data:
   logs:
